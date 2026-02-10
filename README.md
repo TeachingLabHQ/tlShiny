@@ -4,6 +4,7 @@
 # tlShiny
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of tlShiny is to provide useful functions for Teaching Lab
@@ -16,5 +17,5 @@ You can install the development version of tlShiny from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("teachinglab/tlShiny")
+devtools::install_github("TeachingLabHQ/tlShiny")
 ```

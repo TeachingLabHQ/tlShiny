@@ -26,5 +26,5 @@ You can install the development version of tlShiny from [GitHub](https://github.
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("teachinglab/tlShiny")
+devtools::install_github("TeachingLabHQ/tlShiny")
 ```
