@@ -1202,8 +1202,8 @@ end_coaching_feedback_graph <- function(data) {
 
 
 
-#' @title Get % positive on any of the student surveys
-#' @description Uses column names and finds the % in each attributed to positive answers (or negative if reverse coded), summarises by prepost
+#' @title Get percent positive on any of the student surveys
+#' @description Uses column names and finds the percent in each attributed to positive answers (or negative if reverse coded), summarises by prepost
 #' @param data the data to use
 #' @return a tibble
 #' @export

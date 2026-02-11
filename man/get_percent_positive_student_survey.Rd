@@ -2,7 +2,7 @@
 % Please edit documentation in R/dashboard_functions.R
 \name{get_percent_positive_student_survey}
 \alias{get_percent_positive_student_survey}
-\title{Get % positive on any of the student surveys}
+\title{Get percent positive on any of the student surveys}
 \usage{
 get_percent_positive_student_survey(data)
 }
@@ -13,5 +13,5 @@ get_percent_positive_student_survey(data)
 a tibble
 }
 \description{
-Uses column names and finds the % in each attributed to positive answers (or negative if reverse coded), summarises by prepost
+Uses column names and finds the percent in each attributed to positive answers (or negative if reverse coded), summarises by prepost
 }
