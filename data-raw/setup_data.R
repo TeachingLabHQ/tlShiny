@@ -30,6 +30,7 @@ subsites <- current_subsites |>
              "NY_CUNY/UA",
              "NY_LION Charter Schools",
              "NY_Transfer High Schools",
+             "RI_Rhode Island Department of Education",
              "TN_Acceleration for All",
              "TN_Acceleration for All",
              "TX_El Paso Leadership Academy",
