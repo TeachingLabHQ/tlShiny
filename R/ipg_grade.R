@@ -4,7 +4,8 @@
 #' @export
 ipg_character_cols <- c(
   "k12_m_ca1a", "k12_m_ca1b", "k12_m_ca1c",
-  "k12_ela_ca1a", "k12_ela_ca1b", "k12_ela_ca1c"
+  "k12_ela_ca1a", "k12_ela_ca1b", "k12_ela_ca1c",
+  "tl_sci_ca1a", "tl_sci_ca1b", "tl_sci_ca1c"
 )
 
 #' @title IPG Numeric Columns
@@ -22,7 +23,9 @@ ipg_numeric_cols <- c(
   "sci_ca1a", "sci_ca1b", "sci_ca1c", "ss_ca2a", "ss_ca2b",
   "ss_ca2c", "ss_ca2d", "sci_ca2a", "sci_ca2b", "sci_ca2c",
   "sci_ca2d", "ss_ca3a", "ss_ca3b", "ss_ca3c", "ss_ca3d",
-  "sci_ca3a", "sci_ca3b", "sci_ca3c", "sci_ca3d"
+  "sci_ca3a", "sci_ca3b", "sci_ca3c", "sci_ca3d",
+  "tl_sci_ca2a", "tl_sci_ca2b", "tl_sci_ca2c", "tl_sci_ca2d",
+  "tl_sci_ca3a", "tl_sci_ca3b", "tl_sci_ca3c", "tl_sci_ca3d"
 )
 
 #' @title IPG Numeric Low Columns
