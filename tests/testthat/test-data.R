@@ -106,7 +106,7 @@ test_that("Check that subsites are up to date", {
   #              "TN_McNairy County Schools",
   #              "TX_El Paso Leadership Academy",
   #              "TX_La Joya ISD"))
-  # usethis::use_data(subsites, overwrite = TRUE)
+  usethis::use_data(subsites, overwrite = TRUE)
 })
 
 
