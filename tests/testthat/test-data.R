@@ -91,7 +91,7 @@ test_that("Check that subsites are up to date", {
   #              "MA_West Springfield",
   #              "MO_KIPP Kansas City",
   #              "NJ_Great Oaks Legacy Charter Schools",
-  #              "NM_Los Lunas",
+  #              "NM_Los Lunas Schools",
   #              "NM_Rio Gallinas",
   #              "NY_CPS_OpenSciEd",
   #              "NY_Ascend Charter Schools",
@@ -106,7 +106,7 @@ test_that("Check that subsites are up to date", {
   #              "TN_McNairy County Schools",
   #              "TX_El Paso Leadership Academy",
   #              "TX_La Joya ISD"))
-  usethis::use_data(subsites, overwrite = TRUE)
+  # usethis::use_data(subsites, overwrite = TRUE)
 })
 
 
