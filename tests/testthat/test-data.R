@@ -56,6 +56,7 @@ test_that("Check that subsites are up to date", {
                         "ri_rhode_island",
                         "tn_acceleration",
                         "tn_acceleration2",
+                        "tn_hamblen",
                         "tn_mcnairy",
                         "tx_elpaso",
                         "tx_la_joya")
@@ -103,6 +104,7 @@ test_that("Check that subsites are up to date", {
   #              "RI_Rhode Island Department of Education",
   #              "TN_Acceleration for All",
   #              "TN_Acceleration for All",
+  #              "TN_Hamblen County Schools",
   #              "TN_McNairy County Schools",
   #              "TX_El Paso Leadership Academy",
   #              "TX_La Joya ISD"))
