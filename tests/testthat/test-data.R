@@ -104,7 +104,7 @@ test_that("Check that subsites are up to date", {
   #              "RI_Rhode Island Department of Education",
   #              "TN_Acceleration for All",
   #              "TN_Acceleration for All",
-  #              "TN_Hamblen County Schools",
+  #              "TN_Hamblen County School District",
   #              "TN_McNairy County Schools",
   #              "TX_El Paso Leadership Academy",
   #              "TX_La Joya ISD"))
