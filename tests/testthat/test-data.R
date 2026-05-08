@@ -9,6 +9,10 @@ test_that("Check that subsites are up to date", {
 
   current_subsites <- c("ar_osceola",
                         "ca_santa_ana",
+                        "clc_coney",
+                        "clc_dream",
+                        "clc_hebrew",
+                        "clc_neighborhood",
                         "co_denver",
                         "ct_bristol",
                         "ct_hamden",
@@ -67,6 +71,10 @@ test_that("Check that subsites are up to date", {
   # subsites <- current_subsites |>
   #   setNames(c("AR_Osceola School District",
   #              "CA_Santa Ana Unified School District",
+  #              "CLC_Coney Island Prep",
+  #              "CLC_DREAM Charter Schools",
+  #              "CLC_Hebrew Public Charter Schools",
+  #              "CLC_Neighborhood Charter Schools",
   #              "CO_Denver Public Schools",
   #              "CT_Bristol",
   #              "CT_Hamden",
