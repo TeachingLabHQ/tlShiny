@@ -1,7 +1,7 @@
 Package: tlShiny
 Type: Package
 Title: Supplies essential functions to Teaching Lab dashboards
-Version: 0.1.0
+Version: 0.1.1
 Author: Duncan Gates
 Maintainer: Duncan Gates <duncan.gates123@gmail.com>
 Description: A bunch of random functions I use in developing dashboards

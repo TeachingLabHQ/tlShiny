@@ -15,19 +15,38 @@ remove_empty_tl <- function(data) {
 #' @param data the dataframe to apply filter
 #' @param filter_this Filter for this, only filters if length >= 1
 #' @param dat_filter Data column object to filter
+#' @param multi_value If TRUE, values like "ELA/Literacy, Math" are split on ", "
+#' and the row is kept when any piece matches `filter_this`
 #' @return filtered data.frame
 #' @export
-neg_cond_filter <- function(data, filter_this, dat_filter) {
+neg_cond_filter <- function(data, filter_this, dat_filter, multi_value = FALSE) {
 
   # Check if any of the filters are not the "All x" pattern and filter for the inputs if that is TRUE
-  if (length(filter_this) > 1) {
-    collapse::fsubset(data, data[[dat_filter]] %in% filter_this)
-  } else if (length(filter_this) == 1 && filter_this != "") {
-    collapse::fsubset(data, data[[dat_filter]] == filter_this)
-  } else {
-    data
+  if (length(filter_this) == 0 || (length(filter_this) == 1 && filter_this == "")) {
+    return(data)
   }
 
+  if (multi_value) {
+    collapse::fsubset(data, multi_value_match(data[[dat_filter]], filter_this))
+  } else if (length(filter_this) > 1) {
+    collapse::fsubset(data, data[[dat_filter]] %in% filter_this)
+  } else {
+    collapse::fsubset(data, data[[dat_filter]] == filter_this)
+  }
+
+}
+
+# Exact matches first, then only split the values that contain ", "
+multi_value_match <- function(column_values, filter_this) {
+  column_values <- as.character(column_values)
+  is_match <- column_values %in% filter_this
+  needs_split <- !is_match & grepl(", ", column_values, fixed = TRUE)
+  is_match[needs_split] <- vapply(
+    strsplit(column_values[needs_split], ", ", fixed = TRUE),
+    \(pieces) any(pieces %in% filter_this),
+    logical(1)
+  )
+  is_match
 }
 
 #' @title Date filter

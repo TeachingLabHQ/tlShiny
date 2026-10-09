@@ -4,7 +4,7 @@
 \alias{neg_cond_filter}
 \title{Negative Conditional Filter}
 \usage{
-neg_cond_filter(data, filter_this, dat_filter)
+neg_cond_filter(data, filter_this, dat_filter, multi_value = FALSE)
 }
 \arguments{
 \item{data}{the dataframe to apply filter}
@@ -12,6 +12,9 @@ neg_cond_filter(data, filter_this, dat_filter)
 \item{filter_this}{Filter for this, only filters if length >= 1}
 
 \item{dat_filter}{Data column object to filter}
+
+\item{multi_value}{If TRUE, values like "ELA/Literacy, Math" are split on ", "
+and the row is kept when any piece matches `filter_this`}
 }
 \value{
 filtered data.frame
