@@ -40,7 +40,7 @@ know_assess_summary <- function(data, know_assess_filter) {
                          vjust = -0.8,
                          color = "black",
                          fontface = "bold",
-                         family = "Calibri Bold",
+                         family = "Poppins",
                          size = 20) +
       ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
       ggplot2::labs(x = "", y = "",
@@ -50,10 +50,10 @@ know_assess_summary <- function(data, know_assess_filter) {
                                   limits = c(0, 100)) +
       tlShiny::theme_tl() +
       ggplot2::theme(
-        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 25, family = "Calibri Bold"),
+        plot.title = ggtext::element_markdown(lineheight = 1.1, hjust = 0.5, size = 25, face = "bold", family = "Poppins"),
         legend.position = "none",
-        axis.text.x = ggplot2::element_text(face = "bold", size = 25, family = "Calibri"),
-        axis.text.y = ggplot2::element_text(face = "bold", size = 25, family = "Calibri"))
+        axis.text.x = ggplot2::element_text(face = "bold", size = 25, family = "Lora"),
+        axis.text.y = ggplot2::element_text(face = "bold", size = 25, family = "Lora"))
 
     return(p)
   } else {
@@ -100,7 +100,7 @@ know_assess_summary_detailed <- function(data, know_assess) {
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(value), "%")),
                        vjust = -0.1,
                        fontface = "bold",
-                       family = "Calibri",
+                       family = "Lora",
                        size = 10) +
     ggplot2::facet_wrap( ~ factor(question, levels = c("Total", unique(plot_data$question)[!plot_data$question %in% "Total"]))) +
     ggplot2::scale_fill_manual(values = c("Before" = "#D17DF7", "After" = "#55BBC7")) +
@@ -239,7 +239,7 @@ make_ipg_ela_summary_chart <- function(data, round = "Baseline (first observatio
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score), "% (n = ", n, ")")),
               fontface = "bold",
               color = "black",
-              family = "Calibri Bold",
+              family = "Poppins",
               vjust = -0.4,
               size = 7.25
     ) +
@@ -263,7 +263,7 @@ make_ipg_ela_summary_chart <- function(data, round = "Baseline (first observatio
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(size = 24),
       axis.text.y = ggplot2::element_text(size = 24),
-      plot.title = ggplot2::element_text(face = "bold", family = "Calibri Bold", size = 30),
+      plot.title = ggplot2::element_text(face = "bold", family = "Poppins", size = 30),
       plot.caption = ggplot2::element_text(size = 12, face = "italic")
     )
 
@@ -396,7 +396,7 @@ make_ipg_fsot_summary_chart <- function(data, round = "Baseline (first observati
     ggplot2::geom_text(ggplot2::aes(label = paste0(round(Score), "% (n = ", n, ")")),
                        fontface = "bold",
                        color = "black",
-                       family = "Calibri Bold",
+                       family = "Poppins",
                        vjust = -0.4,
                        size = 7.25
     ) +
@@ -420,7 +420,7 @@ make_ipg_fsot_summary_chart <- function(data, round = "Baseline (first observati
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(size = 24),
       axis.text.y = ggplot2::element_text(size = 24),
-      plot.title = ggplot2::element_text(face = "bold", family = "Calibri Bold", size = 30),
+      plot.title = ggplot2::element_text(face = "bold", family = "Poppins", size = 30),
       plot.caption = ggplot2::element_text(size = 12, face = "italic")
     )
 
@@ -545,7 +545,7 @@ make_ipg_math_summary_chart <- function(data, round = "Baseline (first observati
               fontface = "bold",
               vjust = -0.4,
               color = "black",
-              family = "Calibri Bold",
+              family = "Poppins",
               size = 7.25
     ) +
     ggplot2::scale_fill_manual(values = tlShiny::tl_palette2(n = unique_color_n, base_color_start = base_color, end_color_start = end_color)) +
@@ -568,7 +568,7 @@ make_ipg_math_summary_chart <- function(data, round = "Baseline (first observati
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(size = 24),
       axis.text.y = ggplot2::element_text(size = 24),
-      plot.title = ggplot2::element_text(face = "bold", family = "Calibri Bold", size = 30),
+      plot.title = ggplot2::element_text(face = "bold", family = "Poppins", size = 30),
       plot.caption = ggplot2::element_text(size = 12, face = "italic")
     )
 
@@ -667,7 +667,7 @@ make_teacher_curriculum_usage <- function(data) {
         ),
         axis.title.y = ggplot2::element_text(size = 19),
         axis.text.x = ggplot2::element_blank(),
-        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
+        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Poppins"),
         legend.position = "bottom",
         legend.key.height = ggplot2::unit(1.3, "cm"),
         legend.key.width = ggplot2::unit(1.3, "cm"),
@@ -729,7 +729,7 @@ make_teacher_lesson_usage <- function(data) {
         ),
         position = ggplot2::position_stack(vjust = 0.5),
         fontface = "bold",
-        family = "Calibri Bold",
+        family = "Poppins",
         size = 6
       ) +
       ggplot2::labs(
@@ -766,12 +766,12 @@ make_teacher_lesson_usage <- function(data) {
           margin = ggplot2::margin(t = 0, l = 0, r = -115, b = 0)
         ),
         axis.text.x = ggplot2::element_blank(),
-        axis.title.x = ggplot2::element_text(size = 19, face = "bold", family = "Calibri Bold"),
+        axis.title.x = ggplot2::element_text(size = 19, face = "bold", family = "Poppins"),
         legend.position = "bottom",
-        legend.text = ggplot2::element_text(size = 19.5, family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 19.5, face = "bold", family = "Poppins"),
         legend.key.width = ggplot2::unit(3, "cm"),
         legend.key.height = ggplot2::unit(1, "cm"),
-        plot.title = ggplot2::element_text(size = 26.5, face = "bold", family = "Calibri Bold"),
+        plot.title = ggplot2::element_text(size = 26.5, face = "bold", family = "Poppins"),
         panel.grid.major = ggplot2::element_blank(),
         panel.grid.minor = ggplot2::element_blank()
       )
@@ -848,7 +848,7 @@ make_teacher_curriculum_perceptions <- function(data) {
         position = ggplot2::position_dodge2(reverse = TRUE, width = 1),
         hjust = -0.25,
         fontface = "bold",
-        family = "Calibri Bold",
+        family = "Poppins",
         size = 8
       ) +
       ggplot2::labs(
@@ -880,12 +880,12 @@ make_teacher_curriculum_perceptions <- function(data) {
           size = 19
         ),
         axis.text.x = ggplot2::element_blank(),
-        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
+        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Poppins"),
         legend.position = "bottom",
         legend.key.height = ggplot2::unit(1.3, "cm"),
         legend.key.width = ggplot2::unit(1.3, "cm"),
         legend.key.size = ggplot2::unit(0.75, "cm"),
-        legend.text = ggplot2::element_text(size = 22, family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 22, face = "bold", family = "Poppins"),
         legend.margin = ggplot2::margin(-25, 0, 0, -80)
       )
   } else {
@@ -960,7 +960,7 @@ contact_lead_graph <- function(data) {
           ),
           position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
           fontface = "bold",
-          family = "Calibri Bold",
+          family = "Poppins",
           size = 11
         ) +
         ggplot2::labs(
@@ -997,7 +997,7 @@ contact_lead_graph <- function(data) {
             size = 18,
             margin = ggplot2::margin(r = -80)
           ),
-          plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Calibri Bold"),
+          plot.title = ggplot2::element_text(size = 30, face = "bold", family = "Poppins"),
           legend.box.margin = ggplot2::margin(t = -10, 0, 0, l = -50),
           legend.text = ggplot2::element_text(size = 23),
           legend.key.width = ggplot2::unit(2, "cm"),
@@ -1077,7 +1077,7 @@ make_teacher_perceptions_school_leaders <- function(data) {
         hjust = -0.1,
         fontface = "bold",
         size = 8,
-        family = "Calibri Bold"
+        family = "Poppins"
       ) +
       ggplot2::labs(
         x = "", y = "",
@@ -1106,12 +1106,12 @@ make_teacher_perceptions_school_leaders <- function(data) {
           size = 21
         ),
         axis.text.x = ggplot2::element_blank(),
-        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
+        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Poppins"),
         legend.position = "bottom",
         legend.key.height = ggplot2::unit(1.3, "cm"),
         legend.key.width = ggplot2::unit(1.3, "cm"),
         legend.key.size = ggplot2::unit(0.75, "cm"),
-        legend.text = ggplot2::element_text(size = 22, family = "Calibri Bold"),
+        legend.text = ggplot2::element_text(size = 22, face = "bold", family = "Poppins"),
         legend.margin = ggplot2::margin(-25, 0, 0, -50)
       )
   } else {
@@ -1201,7 +1201,7 @@ make_teacher_perceptions_peer_relationships <- function(data) {
           size = 19
         ),
         axis.text.x = ggplot2::element_blank(),
-        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Calibri Bold"),
+        plot.title = ggplot2::element_text(size = 25, face = "bold", family = "Poppins"),
         legend.position = "bottom",
         legend.key.height = ggplot2::unit(1.3, "cm"),
         legend.key.width = ggplot2::unit(1.5, "cm"),
@@ -1305,24 +1305,24 @@ make_student_work_chart_people <- function(data) {
           title = paste0("Student Performance On Grade-Level Tasks"),
           subtitle = glue::glue("<br>Of <b>pre</b> on grade-level tasks, {two_grade_pre} {one_grade_pre} {zero_grade_pre}<br>Of <b>post</b> on grade-level tasks, {two_grade_post} {one_grade_post} {zero_grade_post}")
         ) +
-        ggplot2::theme_void(base_family = "Calibri") +
+        ggplot2::theme_void(base_family = "Lora") +
         ggplot2::theme(
           legend.position = "none",
-          plot.title = ggtext::element_markdown(hjust = 0.5, face = "bold", size = 48, family = "Calibri Bold"),
+          plot.title = ggtext::element_markdown(hjust = 0.5, face = "bold", size = 48, family = "Poppins"),
           plot.subtitle = ggtext::element_markdown(
             hjust = 0.5,
             face = "italic",
-            family = "Calibri",
+            family = "Lora",
             lineheight = 0.3,
             size = 38
           ),
-          strip.text = ggplot2::element_text(face = "bold", size = 41, family = "Calibri Bold", color = "black", margin = ggplot2::margin(t = 15))
+          strip.text = ggplot2::element_text(face = "bold", size = 41, family = "Poppins", color = "black", margin = ggplot2::margin(t = 15))
         )
 
       student_work_plot_2
     } else {
       ggplot2::ggplot(data.frame(text = "No submitted student work was graded as asking for mathematical thinking or responding/writing from evidence.", x = 0, y = 0)) +
-        ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
+        ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Poppins", size = 10, color = "black") +
         ggplot2::theme_void()
     }
 
@@ -1364,7 +1364,7 @@ make_student_work_chart_circle <- function(data) {
       ) +
       ggplot2::annotate("text",
                         label = paste0(on_grade_level$Percent[on_grade_level$`Grade Level` == 1 & on_grade_level$Prepost == "Pre"], "%"),
-                        family = "Calibri Bold",
+                        family = "Poppins",
                         fontface = "bold",
                         color = "#04abeb",
                         size = 22,
@@ -1378,7 +1378,7 @@ make_student_work_chart_circle <- function(data) {
       ggplot2::theme_void() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(
-          hjust = 0.5, family = "Calibri Bold", face = "bold", size = 42,
+          hjust = 0.5, family = "Poppins", face = "bold", size = 42,
           vjust = -3
         ),
         panel.background = ggplot2::element_rect(fill = "white", color = "white"),
@@ -1396,7 +1396,7 @@ make_student_work_chart_circle <- function(data) {
       ) +
       ggplot2::annotate("text",
                         label = paste0(on_grade_level$Percent[on_grade_level$`Grade Level` == 1 & on_grade_level$Prepost == "Post"], "%"),
-                        family = "Calibri Bold",
+                        family = "Poppins",
                         fontface = "bold",
                         color = "#04abeb",
                         size = 22,
@@ -1410,7 +1410,7 @@ make_student_work_chart_circle <- function(data) {
       ggplot2::theme_void() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(
-          hjust = 0.5, family = "Calibri Bold", face = "bold", size = 35,
+          hjust = 0.5, family = "Poppins", face = "bold", size = 35,
           vjust = -3
         ),
         panel.background = ggplot2::element_rect(fill = "white", color = "white"),

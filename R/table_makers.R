@@ -158,12 +158,12 @@ quote_viz <- function(data,
       ) |>
       ggplot2::ggplot() +
       ggtext::geom_richtext(
-        fill = NA, label.color = NA, family = "Calibri",
+        fill = NA, label.color = NA, family = "Lora",
         ggplot2::aes(label = text, x = x, y = y)
       ) +
       ggplot2::scale_y_discrete(expand = c(0, 0.3)) +
       ggplot2::theme_void() +
-      ggplot2::theme(text = ggplot2::element_text(family = "Calibri"))
+      ggplot2::theme(text = ggplot2::element_text(family = "Lora"))
   } else if (viz_type == "gt") {
     if (is.data.frame(data)) {
       data <- as.data.frame(data)

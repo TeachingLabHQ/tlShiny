@@ -194,14 +194,14 @@ file.path2 <- function(..., fsep = .Platform$file.sep) {
 #' @description A plot that says no data available, and to check your filters
 #' @export
 no_data_plot_filters <- ggplot2::ggplot(data.frame(text = "No data available for this set of filters,\ncheck what you have set!", x = 0, y = 0)) +
-  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
+  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Poppins", size = 10, color = "black") +
   ggplot2::theme_void()
 
 #' @title No Data Plot
 #' @description A plot that says no data available yet this year
 #' @export
 no_data_plot_currently <- ggplot2::ggplot(data.frame(text = "No data available yet this year!", x = 0, y = 0)) +
-  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
+  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Poppins", size = 10, color = "black") +
   ggplot2::theme_void()
 
 #' @title No Data Plot Adjustable Title
@@ -209,7 +209,7 @@ no_data_plot_currently <- ggplot2::ggplot(data.frame(text = "No data available y
 #' @export
 no_data_plot_custom <- function(title = "No data available!") {
   ggplot2::ggplot(data.frame(text = title, x = 0, y = 0)) +
-  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Calibri Bold", size = 10, color = "black") +
+  ggplot2::geom_text(ggplot2::aes(label = text, x, y), fontface = "bold", family = "Poppins", size = 10, color = "black") +
   ggplot2::theme_void()
 }
 
@@ -299,7 +299,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
             label = ifelse(Percent > 5, paste0(Percent, "%"), ""),
             y = ypos
           ),
-          family = "Calibri Bold",
+          family = "Poppins",
           fontface = "bold",
           color = ifelse(min(ggplot_data$Percent) == ggplot_data$Percent | ggplot_data$Percent < 10,
             "white",
@@ -319,12 +319,12 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           n = length(unique(ggplot_data[[custom_column_name]]))
         )) +
         ggplot2::guides(fill = ggplot2::guide_legend(override.aes = list(shape = 21, size = 10), reverse = T)) +
-        ggplot2::theme_void(base_family = "Calibri") +
+        ggplot2::theme_void(base_family = "Lora") +
         ggplot2::theme(
           legend.position = "bottom",
           legend.text = ggplot2::element_text(size = 20),
           legend.title = ggplot2::element_blank(),
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Calibri Bold"),
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Poppins"),
           legend.spacing.x = ggplot2::unit(1.0, 'cm')
         )
     } else if (viz_type == "waffle") {
@@ -371,14 +371,14 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           color = "blue",
           n = length(unique(ggplot_data[[custom_column_name]]))
         )) +
-        ggplot2::theme_void(base_family = "Calibri") +
+        ggplot2::theme_void(base_family = "Lora") +
         ggplot2::theme(
           legend.position = "none",
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Calibri Bold"),
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Poppins"),
           plot.subtitle = ggtext::element_markdown(
             hjust = 0.5, face = "italic",
             lineheight = 1.15, size = 22,
-            family = "Calibri"
+            family = "Lora"
           )
         )
     } else if (viz_type == "treemap") {
@@ -401,7 +401,7 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
         )) +
         treemapify::geom_treemap(key_glyph = ggplot2::draw_key_point) +
         treemapify::geom_treemap_text(ggplot2::aes(label = paste0(!!rlang::ensym(custom_column_name), ": ", Percent, "%")),
-          family = "Calibri Bold",
+          family = "Poppins",
           fontface = "bold",
           # grow = T,
           reflow = T,
@@ -416,11 +416,11 @@ gt_percent_n <- function(df, column, custom_title, no_title = T, base_font = 10,
           color = "blue",
           n = length(unique(ggplot_data[[custom_column_name]]))
         )) +
-        ggplot2::theme_void(base_family = "Calibri") +
+        ggplot2::theme_void(base_family = "Lora") +
         ggplot2::theme(
           legend.position = "none",
           legend.title = ggplot2::element_blank(),
-          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Calibri Bold")
+          plot.title = ggplot2::element_text(hjust = 0.5, face = "bold", size = 30, family = "Poppins")
         )
     }
   } else {
@@ -765,7 +765,7 @@ session_feedback_graph <- function(data) {
         size = 6,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        family = "Calibri Bold",
+        family = "Poppins",
         show.legend = FALSE
       ) +
       ggplot2::scale_fill_manual(values = c(
@@ -791,8 +791,8 @@ session_feedback_graph <- function(data) {
       ggplot2::theme(
         axis.text.y = ggplot2::element_text(size = 15.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.7, color = "black", family = "Calibri"),
+        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Poppins"),
+        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.7, color = "black", family = "Lora"),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
@@ -898,7 +898,7 @@ course_feedback_graph <- function(data) {
         size = 6,
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
-        family = "Calibri Bold",
+        family = "Poppins",
         show.legend = FALSE
       ) +
       ggplot2::scale_fill_manual(values = c(
@@ -924,8 +924,8 @@ course_feedback_graph <- function(data) {
       ggplot2::theme(
         axis.text.y = ggplot2::element_text(size = 15.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Calibri Bold", hjust = 0.5),
-        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.7, color = "black", family = "Calibri"),
+        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Poppins", hjust = 0.5),
+        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.7, color = "black", family = "Lora"),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.margin = ggplot2::margin(t = -20, l = -120, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
@@ -1018,7 +1018,7 @@ ongoing_coaching_feedback_graph <- function(data) {
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
         size = 6,
-        family = "Calibri Bold",
+        family = "Poppins",
         show.legend = FALSE
       ) +
       ggplot2::labs(
@@ -1054,8 +1054,8 @@ ongoing_coaching_feedback_graph <- function(data) {
       ggplot2::theme(
         axis.text.y = ggplot2::element_text(size = 15.5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Calibri Bold"),
-        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.7, color = "black", family = "Calibri"),
+        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Poppins"),
+        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.7, color = "black", family = "Lora"),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.key.width = ggplot2::unit(0.8, "cm"),
         legend.key.height = ggplot2::unit(0.4, "cm"),
@@ -1168,7 +1168,7 @@ end_coaching_feedback_graph <- function(data) {
         position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
         fontface = "bold",
         size = 6,
-        family = "Calibri Bold",
+        family = "Poppins",
         show.legend = FALSE
       ) +
       ggplot2::labs(
@@ -1204,8 +1204,8 @@ end_coaching_feedback_graph <- function(data) {
       ggplot2::theme(
         axis.text.y = ggplot2::element_text(size = 15,5, margin = margin(t = 0, l = 0, r = -10, b = 0), lineheight = 0.7),
         axis.text.x = ggplot2::element_text(size = 9),
-        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Calibri Bold", hjust = 0.5),
-        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.6, color = "black", family = "Calibri"),
+        plot.title = ggplot2::element_text(size = 22, face = "bold", family = "Poppins", hjust = 0.5),
+        legend.text = ggplot2::element_text(size = 13.5, lineheight = 0.6, color = "black", family = "Lora"),
         legend.spacing = ggplot2::unit(0.8, "cm"),
         legend.margin = ggplot2::margin(t = -20, l = -100, r = 0, b = 0),
         legend.key.width = ggplot2::unit(0.8, "cm"),
