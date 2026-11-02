@@ -148,7 +148,11 @@ posthog_browser_script <- function(app, email, tracked_inputs, tab_input) {
       if (is_tab) {
         posthog.capture('tab_viewed', {tab: value});
       } else {
-        posthog.capture('input_changed', {input: event.name, value: value});
+        // Always text: PostHog types a property from the first value it sees,
+        // and a button's click count would make every later value numeric.
+        // Multi-selects arrive as a JSON array string
+        var input_value = typeof value === 'string' ? value : JSON.stringify(value);
+        posthog.capture('input_changed', {input: event.name, input_value: input_value});
       }
     }, 1000);
   });
