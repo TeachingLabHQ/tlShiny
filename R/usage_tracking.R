@@ -139,8 +139,11 @@ posthog_browser_script <- function(app, email, tracked_inputs, tab_input) {
   $(document).on('shiny:inputchanged', function(event) {
     var is_tab = cfg.tab_input !== '' && event.name === cfg.tab_input;
     if (!is_tab && cfg.inputs.indexOf(event.name) === -1) { return; }
-    clearTimeout(timers[event.name]);
     var value = event.value;
+    // A filter emptied by the server (dependent pickers reset when the site
+    // changes) is not a choice the viewer made
+    if (value === null || value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) { return; }
+    clearTimeout(timers[event.name]);
     timers[event.name] = setTimeout(function() {
       if (is_tab) {
         posthog.capture('tab_viewed', {tab: value});
