@@ -18,9 +18,13 @@ Imports:
     ggtext,
     glue,
     gt,
+    httr2,
+    jsonlite,
+    later,
     magrittr,
     purrr,
     rlang,
+    shiny,
     stringr,
     tidyr,
     treemapify,
@@ -28,7 +32,8 @@ Imports:
 Depends: 
     R (>= 4.1.0)
 Suggests:
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
 Remotes:
     hrbrmstr/waffle

@@ -5,7 +5,7 @@
 \alias{ca1_cols}
 \title{Core Action Column Groups}
 \format{
-An object of class \code{character} of length 12.
+An object of class \code{character} of length 15.
 }
 \usage{
 ca1_cols

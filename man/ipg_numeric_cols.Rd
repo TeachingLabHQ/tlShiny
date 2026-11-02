@@ -5,7 +5,7 @@
 \alias{ipg_numeric_cols}
 \title{IPG Numeric Columns}
 \format{
-An object of class \code{character} of length 51.
+An object of class \code{character} of length 59.
 }
 \usage{
 ipg_numeric_cols

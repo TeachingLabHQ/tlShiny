@@ -5,7 +5,7 @@
 \alias{ipg_character_cols}
 \title{IPG Character Columns}
 \format{
-An object of class \code{character} of length 6.
+An object of class \code{character} of length 9.
 }
 \usage{
 ipg_character_cols
