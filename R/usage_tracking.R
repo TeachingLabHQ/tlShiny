@@ -69,57 +69,75 @@ posthog_capture <- function(event, distinct_id, app, properties = list(), timest
 #' Call once at the top of the server function. Once `user_email()` returns
 #' an email it logs `dashboard_opened`, loads PostHog in the browser already
 #' identified as that email, and on session end logs `dashboard_closed` with
-#' `minutes`. Changes to `tracked_inputs` are sent from the browser as
-#' `input_changed` (`tab_input` changes as `tab_viewed`), debounced so a
-#' multi-select that changes several times in a second sends one event.
+#' `minutes`. Input changes are sent from the browser as `input_changed`
+#' (`tab_input` changes as `tab_viewed`), debounced so a multi-select that
+#' changes several times in a second sends one event.
 #'
 #' @param session The Shiny session
 #' @param app App name, e.g. "ongoing_report"
 #' @param user_email A reactive or function returning the viewer's email.
-#'   Defaults to `session$user` (the Connect login)
-#' @param tracked_inputs Input ids whose changes are sent
+#'   Defaults to `session$user` (the Connect login). `NULL` for an app with
+#'   no sign-in: the session is tracked anonymously from the start
+#' @param tracked_inputs Input ids whose changes are sent. `NULL` (the
+#'   default) sends every input the viewer changes through a Shiny input
+#'   control, except free-text, password and file inputs; inputs set from
+#'   JavaScript (sign-in, tables, plots) are left out
 #' @param tab_input The navbar/tabset input id, if any
 #' @param force Track outside Connect too (see [posthog_enabled()])
 #' @return NULL, invisibly
 #' @export
-track_usage <- function(session, app, user_email = \() session$user, tracked_inputs = character(0), tab_input = NULL, force = FALSE) {
+track_usage <- function(session, app, user_email = \() session$user, tracked_inputs = NULL, tab_input = NULL, force = FALSE) {
   if (!posthog_enabled(force = force)) {
     return(invisible(NULL))
   }
 
   session_started <- Sys.time()
-  tracked_email <- NULL
+  tracked_id <- NULL
 
-  shiny::observeEvent(user_email(), {
-    tracked_email <<- tolower(user_email())
-    posthog_capture("dashboard_opened", tracked_email, app, force = force)
+  start_tracking <- function(distinct_id, identified) {
+    tracked_id <<- distinct_id
+    posthog_capture("dashboard_opened", distinct_id, app, properties = list(identified = identified), force = force)
     shiny::insertUI(
       selector = "head",
       where = "beforeEnd",
-      ui = posthog_browser_script(app, tracked_email, tracked_inputs, tab_input),
+      ui = posthog_browser_script(app, distinct_id, identified, tracked_inputs, tab_input),
       immediate = TRUE,
       session = session
     )
-  }, once = TRUE, ignoreNULL = TRUE)
+  }
+
+  if (is.null(user_email)) {
+    # No sign-in: one anonymous id per session, shared by the R and browser
+    # events. Waits for the first flush so the browser is there for insertUI
+    session$onFlushed(\() {
+      start_tracking(paste0("anon_", substr(session$token, 1, 16)), identified = FALSE)
+    }, once = TRUE)
+  } else {
+    shiny::observeEvent(user_email(), {
+      start_tracking(tolower(user_email()), identified = TRUE)
+    }, once = TRUE, ignoreNULL = TRUE)
+  }
 
   session$onSessionEnded(\() {
     minutes <- round(as.numeric(difftime(Sys.time(), session_started, units = "mins")), 1)
-    posthog_capture("dashboard_closed", tracked_email, app, properties = list(minutes = minutes), force = force)
+    posthog_capture("dashboard_closed", tracked_id, app, properties = list(minutes = minutes), force = force)
   })
 
   invisible(NULL)
 }
 
-# The PostHog loader snippet, initialised as the known user, with the Shiny
-# input listener. Values are passed through jsonlite so quotes in an email or
-# input id can't break the script
-posthog_browser_script <- function(app, email, tracked_inputs, tab_input) {
+# The PostHog loader snippet, initialised as the known user (or the
+# session's anonymous id), with the Shiny input listener. Values are passed
+# through jsonlite so quotes in an email or input id can't break the script
+posthog_browser_script <- function(app, distinct_id, identified, tracked_inputs, tab_input) {
   config <- jsonlite::toJSON(
     list(
       key = Sys.getenv("POSTHOG_PROJECT_KEY"),
       host = posthog_host,
       app = app,
-      email = email,
+      distinct_id = distinct_id,
+      identified = identified,
+      track_all = is.null(tracked_inputs),
       inputs = as.list(tracked_inputs),
       tab_input = if (is.null(tab_input)) { "" } else { tab_input }
     ),
@@ -132,13 +150,27 @@ posthog_browser_script <- function(app, email, tracked_inputs, tab_input) {
   posthog.init(cfg.key, {
     api_host: cfg.host,
     person_profiles: 'identified_only',
-    bootstrap: {distinctID: cfg.email, isIdentifiedID: true},
-    loaded: function(ph) { ph.register({app: cfg.app, source: 'shiny_browser'}); }
+    bootstrap: {distinctID: cfg.distinct_id, isIdentifiedID: cfg.identified},
+    loaded: function(ph) {
+      ph.register({app: cfg.app, source: 'shiny_browser'});
+      if (cfg.identified) { ph.setPersonProperties({email: cfg.distinct_id}); }
+    }
   });
+  // Track-all mode leaves out inputs set from JavaScript (no binding: sign-in,
+  // DT/plotly/leaflet state), Shiny internals, and anything typed as free text
+  var noisy_name = /^[.]|^DataTables_|^shinyjs-|^waiter_|_rows_|_state$|_search|_cell_|_cells_|_columns_|_last_clicked$|^plotly_|_bounds$|_center$|_zoom$|_hover$|_click$|_dblclick$|_brush$/;
+  // By Shiny binding name, not the HTML element: sliders are built on an
+  // <input type=\"text\"> but are not free text
+  var free_text_binding = /textInput|textareaInput|passwordInput|fileInput|textAreaInput/i;
+  function is_tracked(event) {
+    if (!cfg.track_all) { return cfg.inputs.indexOf(event.name) !== -1; }
+    if (!event.binding) { return false; }
+    return !noisy_name.test(event.name) && !free_text_binding.test(event.binding.name || '');
+  }
   var timers = {};
   $(document).on('shiny:inputchanged', function(event) {
     var is_tab = cfg.tab_input !== '' && event.name === cfg.tab_input;
-    if (!is_tab && cfg.inputs.indexOf(event.name) === -1) { return; }
+    if (!is_tab && !is_tracked(event)) { return; }
     var value = event.value;
     // A filter emptied by the server (dependent pickers reset when the site
     // changes) is not a choice the viewer made
@@ -152,7 +184,7 @@ posthog_browser_script <- function(app, email, tracked_inputs, tab_input) {
         // and a button's click count would make every later value numeric.
         // Multi-selects arrive as a JSON array string
         var input_value = typeof value === 'string' ? value : JSON.stringify(value);
-        posthog.capture('input_changed', {input: event.name, input_value: input_value});
+        posthog.capture('input_changed', {input: event.name, input_value: input_value.slice(0, 500)});
       }
     }, 1000);
   });

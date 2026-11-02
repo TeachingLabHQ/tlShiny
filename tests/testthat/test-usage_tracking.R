@@ -56,13 +56,20 @@ test_that("a failed request warns instead of erroring", {
 
 test_that("the browser script carries the config as escaped JSON", {
   withr::local_envvar(POSTHOG_PROJECT_KEY = "phc_test")
-  script <- as.character(posthog_browser_script("test_app", "o'brien\"@x.org", "siteSelect", NULL))
+  script <- as.character(posthog_browser_script("test_app", "o'brien\"@x.org", TRUE, "siteSelect", NULL))
 
   expect_match(script, "posthog.init(cfg.key", fixed = TRUE)
   # A single tracked input is still a JSON array, so indexOf() works on it
   expect_match(script, "\"inputs\":[\"siteSelect\"]", fixed = TRUE)
   expect_match(script, "\"tab_input\":\"\"", fixed = TRUE)
   expect_match(script, "o'brien\\\"@x.org", fixed = TRUE)
+  expect_match(script, "\"track_all\":false", fixed = TRUE)
+
+  # NULL tracked_inputs switches on track-all mode
+  track_all_script <- as.character(posthog_browser_script("test_app", "anon_x", FALSE, NULL, "main_nav"))
+  expect_match(track_all_script, "\"track_all\":true", fixed = TRUE)
+  expect_match(track_all_script, "\"identified\":false", fixed = TRUE)
+  expect_match(track_all_script, "\"tab_input\":\"main_nav\"", fixed = TRUE)
 })
 
 test_that("track_usage logs open once and close with minutes", {
@@ -104,4 +111,23 @@ test_that("track_usage does nothing off Connect", {
     session$flushReact()
   })
   expect_length(captured_events, 0)
+})
+
+test_that("track_usage with no sign-in tracks the session anonymously", {
+  withr::local_envvar(POSTHOG_PROJECT_KEY = "phc_test", RSTUDIO_PRODUCT = "CONNECT")
+  captured_events <- list()
+  local_mocked_bindings(posthog_capture = \(event, distinct_id, app, properties = list(), ...) {
+    captured_events[[length(captured_events) + 1]] <<- list(event = event, distinct_id = distinct_id, properties = properties)
+  })
+
+  shiny::testServer(\(input, output, session) track_usage(session, app = "test_app", user_email = NULL), {
+    session$flushReact()
+    session$flushReact()
+  })
+
+  events <- purrr::map_chr(captured_events, "event")
+  expect_equal(events, c("dashboard_opened", "dashboard_closed"))
+  expect_match(captured_events[[1]]$distinct_id, "^anon_")
+  expect_identical(captured_events[[1]]$distinct_id, captured_events[[2]]$distinct_id)
+  expect_false(captured_events[[1]]$properties$identified)
 })

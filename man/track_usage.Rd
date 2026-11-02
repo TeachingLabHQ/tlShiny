@@ -8,7 +8,7 @@ track_usage(
   session,
   app,
   user_email = function() session$user,
-  tracked_inputs = character(0),
+  tracked_inputs = NULL,
   tab_input = NULL,
   force = FALSE
 )
@@ -19,9 +19,13 @@ track_usage(
 \item{app}{App name, e.g. "ongoing_report"}
 
 \item{user_email}{A reactive or function returning the viewer's email.
-Defaults to `session$user` (the Connect login)}
+Defaults to `session$user` (the Connect login). `NULL` for an app with
+no sign-in: the session is tracked anonymously from the start}
 
-\item{tracked_inputs}{Input ids whose changes are sent}
+\item{tracked_inputs}{Input ids whose changes are sent. `NULL` (the
+default) sends every input the viewer changes through a Shiny input
+control, except free-text, password and file inputs; inputs set from
+JavaScript (sign-in, tables, plots) are left out}
 
 \item{tab_input}{The navbar/tabset input id, if any}
 
@@ -34,7 +38,7 @@ NULL, invisibly
 Call once at the top of the server function. Once `user_email()` returns
 an email it logs `dashboard_opened`, loads PostHog in the browser already
 identified as that email, and on session end logs `dashboard_closed` with
-`minutes`. Changes to `tracked_inputs` are sent from the browser as
-`input_changed` (`tab_input` changes as `tab_viewed`), debounced so a
-multi-select that changes several times in a second sends one event.
+`minutes`. Input changes are sent from the browser as `input_changed`
+(`tab_input` changes as `tab_viewed`), debounced so a multi-select that
+changes several times in a second sends one event.
 }
