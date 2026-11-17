@@ -173,8 +173,11 @@ posthog_browser_script <- function(app, distinct_id, identified, tracked_inputs,
     if (!is_tab && !is_tracked(event)) { return; }
     var value = event.value;
     // A filter emptied by the server (dependent pickers reset when the site
-    // changes) is not a choice the viewer made
-    if (value === null || value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) { return; }
+    // changes, which some pickers send as ['']) is not a choice the viewer made
+    if (value === null || value === undefined || value === '') { return; }
+    if (Array.isArray(value) && value.every(function(v) { return v === null || v === ''; })) { return; }
+    // Action buttons report 0 when they first bind, before anyone clicks
+    if (value === 0 && event.binding && /actionButton/i.test(event.binding.name || '')) { return; }
     clearTimeout(timers[event.name]);
     timers[event.name] = setTimeout(function() {
       if (is_tab) {
