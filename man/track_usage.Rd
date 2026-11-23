@@ -10,6 +10,7 @@ track_usage(
   user_email = function() session$user,
   tracked_inputs = NULL,
   tab_input = NULL,
+  surveys = TRUE,
   force = FALSE
 )
 }
@@ -28,6 +29,10 @@ control, except free-text, password and file inputs; inputs set from
 JavaScript (sign-in, tables, plots) are left out}
 
 \item{tab_input}{The navbar/tabset input id, if any}
+
+\item{surveys}{Show PostHog surveys (the dashboard feedback popups) in
+this app. `FALSE` for tools people use to enter or grade data, where a
+popup would interrupt the work}
 
 \item{force}{Track outside Connect too (see [posthog_enabled()])}
 }

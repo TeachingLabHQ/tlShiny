@@ -4,6 +4,8 @@
 #     these, and dashboard_closed carries the session length)
 #   - tab_viewed / input_changed from the browser, only for the inputs named
 #     in `tracked_inputs`, plus PostHog's own pageviews and click autocapture
+#   - any live PostHog survey (the dashboard feedback popups, built by
+#     TeachingLab's sync_posthog_surveys.R), unless `surveys = FALSE`
 # Every event carries an `app` property so one PostHog project holds every
 # dashboard. Nothing is sent unless the app runs on Posit Connect and
 # POSTHOG_PROJECT_KEY is set, so local runs stay out of the data.
@@ -83,10 +85,13 @@ posthog_capture <- function(event, distinct_id, app, properties = list(), timest
 #'   control, except free-text, password and file inputs; inputs set from
 #'   JavaScript (sign-in, tables, plots) are left out
 #' @param tab_input The navbar/tabset input id, if any
+#' @param surveys Show PostHog surveys (the dashboard feedback popups) in
+#'   this app. `FALSE` for tools people use to enter or grade data, where a
+#'   popup would interrupt the work
 #' @param force Track outside Connect too (see [posthog_enabled()])
 #' @return NULL, invisibly
 #' @export
-track_usage <- function(session, app, user_email = \() session$user, tracked_inputs = NULL, tab_input = NULL, force = FALSE) {
+track_usage <- function(session, app, user_email = \() session$user, tracked_inputs = NULL, tab_input = NULL, surveys = TRUE, force = FALSE) {
   if (!posthog_enabled(force = force)) {
     return(invisible(NULL))
   }
@@ -100,7 +105,7 @@ track_usage <- function(session, app, user_email = \() session$user, tracked_inp
     shiny::insertUI(
       selector = "head",
       where = "beforeEnd",
-      ui = posthog_browser_script(app, distinct_id, identified, tracked_inputs, tab_input),
+      ui = posthog_browser_script(app, distinct_id, identified, tracked_inputs, tab_input, surveys),
       immediate = TRUE,
       session = session
     )
@@ -129,7 +134,7 @@ track_usage <- function(session, app, user_email = \() session$user, tracked_inp
 # The PostHog loader snippet, initialised as the known user (or the
 # session's anonymous id), with the Shiny input listener. Values are passed
 # through jsonlite so quotes in an email or input id can't break the script
-posthog_browser_script <- function(app, distinct_id, identified, tracked_inputs, tab_input) {
+posthog_browser_script <- function(app, distinct_id, identified, tracked_inputs, tab_input, surveys = TRUE) {
   config <- jsonlite::toJSON(
     list(
       key = Sys.getenv("POSTHOG_PROJECT_KEY"),
@@ -139,7 +144,8 @@ posthog_browser_script <- function(app, distinct_id, identified, tracked_inputs,
       identified = identified,
       track_all = is.null(tracked_inputs),
       inputs = as.list(tracked_inputs),
-      tab_input = if (is.null(tab_input)) { "" } else { tab_input }
+      tab_input = if (is.null(tab_input)) { "" } else { tab_input },
+      surveys = isTRUE(surveys)
     ),
     auto_unbox = TRUE
   )
@@ -150,6 +156,7 @@ posthog_browser_script <- function(app, distinct_id, identified, tracked_inputs,
   posthog.init(cfg.key, {
     api_host: cfg.host,
     person_profiles: 'identified_only',
+    disable_surveys: !cfg.surveys,
     bootstrap: {distinctID: cfg.distinct_id, isIdentifiedID: cfg.identified},
     loaded: function(ph) {
       ph.register({app: cfg.app, source: 'shiny_browser'});

@@ -72,6 +72,16 @@ test_that("the browser script carries the config as escaped JSON", {
   expect_match(track_all_script, "\"tab_input\":\"main_nav\"", fixed = TRUE)
 })
 
+test_that("surveys are on by default and can be switched off per app", {
+  withr::local_envvar(POSTHOG_PROJECT_KEY = "phc_test")
+  default_script <- as.character(posthog_browser_script("test_app", "a@x.org", TRUE, NULL, NULL))
+  expect_match(default_script, "\"surveys\":true", fixed = TRUE)
+  expect_match(default_script, "disable_surveys: !cfg.surveys", fixed = TRUE)
+
+  no_survey_script <- as.character(posthog_browser_script("test_app", "a@x.org", TRUE, NULL, NULL, surveys = FALSE))
+  expect_match(no_survey_script, "\"surveys\":false", fixed = TRUE)
+})
+
 test_that("track_usage logs open once and close with minutes", {
   withr::local_envvar(POSTHOG_PROJECT_KEY = "phc_test", RSTUDIO_PRODUCT = "CONNECT")
   captured_events <- list()
